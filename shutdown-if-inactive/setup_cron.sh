@@ -15,8 +15,9 @@ echo "Python Path: $PYTHON_PATH"
 echo "Current crontab:"
 crontab -l
 
+# The file /etc/environment.sso stores the environment variables used by the API to authenticate to Azure services
 echo "Adding crontab entry for instance auto-shutdown"
-(crontab -l 2>/dev/null; echo "*/1 * * * * $PYTHON_PATH $SCRIPT_PATH/shutdown_if_inactive.py > /tmp/shutdown.log 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "*/1 * * * * bash -l -c \"export \$(xargs < /etc/environment.sso); $PYTHON_PATH $SCRIPT_PATH/shutdown_if_inactive.py > /tmp/shutdown.log 2>&1\"") | crontab -
 
 echo "New crontab:"
 crontab -l
